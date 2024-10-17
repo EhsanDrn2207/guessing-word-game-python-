@@ -1,5 +1,5 @@
 import sys
-import os
+import subprocess
 import tkinter as tk
 import random
 
@@ -141,12 +141,18 @@ choice_btn = tk.Button(
 
 choice_btn.grid(row=2, column=4, columnspan=2)
 
-def restart_program(*args):
-    """Restarts the current program.
-    Note: this function does not return. Any cleanup action (like
-    saving data) must be done before calling this function."""
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
+
+def restart_program():
+    """Restarts the current program using subprocess.
+    Note: This function does not return."""
+    try:
+        # Start a new instance of the current program
+        subprocess.Popen([sys.executable] + sys.argv)
+    except Exception as e:
+        print(f"Error restarting the program: {e}")
+    finally:
+        sys.exit()  # Terminate the current instance
+
     
 restart_btn = tk.Button(
     master=window,
@@ -158,13 +164,4 @@ restart_btn = tk.Button(
 
 restart_btn.grid(row=3, column=4, columnspan=2)
 
-# def bin_button():
-#     window.bind("<s>", get_num_of_chances_from_user)
-#     window.bind("<w>", guess_the_answer)
-#     window.bind("<q>", quit)
-#     window.bind("<r>", restart_program)
-
-# bin_button()
-
 window.mainloop()
-
